@@ -22,6 +22,7 @@ import os
 from subprocess import call
 import tarfile
 import wave
+import six
 
 # Dependency imports
 
@@ -82,10 +83,13 @@ def _get_audio_data(filepath):
   out_filepath = filepath.strip(".WAV") + ".wav"
   # Assumes sox is installed on system. Sox converts from NIST SPHERE to WAV.
   call(["sox", filepath, out_filepath])
-  wav_file = wave.open(open(out_filepath))
+  wav_file = wave.open(open(out_filepath,'rb'))
   frame_count = wav_file.getnframes()
   byte_array = wav_file.readframes(frame_count)
-  data = [int(b.encode("hex"), base=16) for b in byte_array]
+  if six.PY2:
+    data = [int(b.encode("hex"), base=16) for b in byte_array]
+  else:
+    data = [b for b in byte_array]
   return data, frame_count, wav_file.getsampwidth(), wav_file.getnchannels()
 
 
