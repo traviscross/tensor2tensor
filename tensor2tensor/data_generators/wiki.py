@@ -214,7 +214,7 @@ class LanguagemodelWikiScramble(problem.Text2TextProblem):
     case_num = 0
     for page in page_generator(tmp_dir):
       encoded = encoder.encode(page)
-      for i in xrange(len(encoded) // self.sequence_length):
+      for i in range(len(encoded) // self.sequence_length):
         case_num += 1
         if self.max_cases and case_num > self.max_cases:
           return
